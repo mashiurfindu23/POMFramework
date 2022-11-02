@@ -1,104 +1,64 @@
-pipeline 
-{
+pipeline{
+    
     agent any
     
-    tools{
-    	maven 'maven'
-        }
-
-    stages 
-    {
-        stage('Build') 
-        {
-            steps
-            {
-                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
-            post 
-            {
-                success
-                {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
+    stages{
+        
+        stage("Build"){
+            steps{
+            echo("build project") 
             }
         }
         
+        stage("Deploy to Dev"){
+            steps{
+            echo("deploy to dev env") 
+            }
+        }
         
+        stage("Run UTs"){
+            steps{
+            echo("RUN UTs") 
+            }
+        }
         
         stage("Deploy to QA"){
             steps{
-                echo("deploy to qa")
-            }
-        }
-                
-        stage('Regression Automation Test') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/mashiur20016/June2022POMUIFramework.git'
-                    sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regession.xml"
-                    
-                }
-            }
-        }
-                
-     
-        stage('Publish Allure Reports') {
-           steps {
-                script {
-                    allure([
-                        includeProperties: false,
-                        jdk: '',
-                        properties: [],
-                        reportBuildPolicy: 'ALWAYS',
-                        results: [[path: '/allure-results']]
-                    ])
-                }
+            echo("deploy to QA env")
             }
         }
         
-        
-        stage('Publish Extent Report'){
+        stage("Run Regression Automation Test"){
             steps{
-                     publishHTML([allowMissing: false,
-                                  alwaysLinkToLastBuild: false, 
-                                  keepAll: true, 
-                                  reportDir: 'reports', 
-                                  reportFiles: 'TestExecutionReport.html', 
-                                  reportName: 'HTML Extent Report', 
-                                  reportTitles: ''])
+            echo("run regression test cases") 
             }
         }
         
-        stage("Deploy to Stage"){
+        stage("Deploy to STAGE"){
             steps{
-                echo("deploy to Stage")
+            echo("deploy to stage env") 
             }
         }
         
-        stage('Sanity Automation Test') {
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/mashiur20016/June2022POMUIFramework.git'
-                    sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml"
-                    
-                }
-            }
-        }
-        
-        stage('Publish sanity Extent Report'){
+        stage("Run Sanity Automation Test"){
             steps{
-                     publishHTML([allowMissing: false,
-                                  alwaysLinkToLastBuild: false, 
-                                  keepAll: true, 
-                                  reportDir: 'reports', 
-                                  reportFiles: 'TestExecutionReport.html', 
-                                  reportName: 'HTML Sanity Extent Report', 
-                                  reportTitles: ''])
+            echo("run sanity test cases") 
             }
         }
+        
+        stage("Deploy to PROD"){
+            steps{
+            echo("deploy to PROD env") 
+            }
+        }
+        
         
         
     }
+    
+    
+    
+    
+    
+}
 }

@@ -3,6 +3,7 @@ package com.qa.opencart.factory;
 import java.util.Properties;
 
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class OptionsManager {
@@ -11,6 +12,7 @@ public class OptionsManager {
 	private Properties prop;
 	private ChromeOptions co;
 	private FirefoxOptions fo;
+	private EdgeOptions eo;
 	
 	
 	public OptionsManager(Properties prop) {
@@ -35,11 +37,24 @@ public class OptionsManager {
 			fo.setHeadless(true);
 			
 		}
+		
 		if(Boolean.parseBoolean(prop.getProperty("incognito"))) {
 			fo.addArguments("--incognito");	
 		}
 		
 		return fo;
 	}
-
+	public EdgeOptions getEdgeOptions() {
+		eo = new EdgeOptions();
+		if(Boolean.parseBoolean(prop.getProperty("headless"))) {
+			fo.setHeadless(true);
+			
+		}
+		
+		if(Boolean.parseBoolean(prop.getProperty("incognito"))) {
+			fo.addArguments("--incognito");	
+		}
+		
+		return eo;
+	}
 }

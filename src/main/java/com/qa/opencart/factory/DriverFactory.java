@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
@@ -14,6 +16,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import com.qa.opencart.errors.AppError;
@@ -54,26 +57,48 @@ public class DriverFactory {
 		optionsManager= new OptionsManager(prop);
 		
 		
-		
+		// remote execution
 		if(browserName.equals("chrome")) {
-			WebDriverManager.chromedriver().setup();
+			if(Boolean.parseBoolean(prop.getProperty("remote"))) {
+				init_remoteDriver("chrome");
+			}
+			else {
+				//local execution
+				WebDriverManager.chromedriver().setup();
+				tlDriver.set(new ChromeDriver(optionsManager.getChromeOptions()));
+			}
 			
-			
-			tlDriver.set(new ChromeDriver(optionsManager.getChromeOptions()));
-		}
+		}	
 		else if(browserName.equals("firefox")) {
-			WebDriverManager.firefoxdriver().setup();
+			if(Boolean.parseBoolean(prop.getProperty("remote"))) {
+				init_remoteDriver("firefox");
+			}
+			else {
+				
+				WebDriverManager.firefoxdriver().setup();
+				tlDriver.set(new FirefoxDriver(optionsManager.getFireFoxOptions()));
+			}
 			
-			tlDriver.set(new FirefoxDriver(optionsManager.getFireFoxOptions()));
+			
 			
 		}
 		else if(browserName.equals("edge")) {
+			
+			if(Boolean.parseBoolean(prop.getProperty("remote"))) {
+				init_remoteDriver("edge");
+			}
+			else {
+
+				WebDriverManager.edgedriver().setup();
+				tlDriver.set(new EdgeDriver(optionsManager.getEdgeOptions()));
+			}
+			
 			WebDriverManager.edgedriver().setup();
 		
 			tlDriver.set(new EdgeDriver());
 		}
 		if(browserName.equals("safari")) {
-		
+		// only local execution Docker doesn't suppoet sufari ..
 			tlDriver.set(new SafariDriver());
 		}
 		else {
@@ -93,7 +118,39 @@ public class DriverFactory {
 		
 		return getDriver();
 	}
-		
+		/**
+		 * 
+		 * remote execution
+		 */
+		private void init_remoteDriver(String browser) {
+			System.out.println("Running test cases on remote GRID machine ..... with browser " +browser);
+			if(browser.equals("chrome")) {
+				try {
+					tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("huburl")),optionsManager.getChromeOptions()));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(browser.equals("firefox")) {
+				try {
+					tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("huburl")),optionsManager.getFireFoxOptions()));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+			}
+			else if(browser.equals("edge")) {
+				try {
+					tlDriver.set(new RemoteWebDriver(new URL(prop.getProperty("huburl")),optionsManager.getEdgeOptions()));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			else {
+				System.out.println("please pass the right webdriver for remote execution...." +browser);
+			}
+	}
+
 		public static synchronized WebDriver getDriver() {
 			return tlDriver.get();
 		}

@@ -116,9 +116,9 @@
 					<reuseForks>true</reuseForks>
 					<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
 					<suiteXmlFiles>
-					<!-- 	<suiteXmlFile>src/test/resources/testrunners/testng_regession.xml</suiteXmlFile> 
-					 -->
-						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile>
+						<suiteXmlFile>src/test/resources/testrunners/testng_regession.xml</suiteXmlFile>
+
+						<!-- <suiteXmlFile>${suiteXmlFile}</suiteXmlFile> -->
 					</suiteXmlFiles>
 
 					<argLine>

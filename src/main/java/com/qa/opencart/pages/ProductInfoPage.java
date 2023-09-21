@@ -67,11 +67,11 @@ public class ProductInfoPage {
 			String metaValue = meta[1].trim();			
 			productInfoMap.put(metaKey, metaValue);     
 			
-			List<WebElement> metaPriceList= eleUtil.getElements(productPriceData);
-			String price = metaPriceList.get(0).getText().trim();
-			String ExTaxPrice = metaPriceList.get(1).getText().trim();
-			productInfoMap.put("price", price);
-			productInfoMap.put("Ex Tax", ExTaxPrice);
+//			List<WebElement> metaPriceList= eleUtil.getElements(productPriceData);
+//			String price = metaPriceList.get(0).getText().trim();
+//			String ExTaxPrice = metaPriceList.get(1).getText().trim();
+//			productInfoMap.put("price", price);
+//			productInfoMap.put("Ex Tax", ExTaxPrice);
 			
 			}
 		
@@ -81,15 +81,15 @@ public class ProductInfoPage {
 		return productInfoMap;
 	}
 	
-	public void getProductPriceData() {
-		List<WebElement> metaPriceList= eleUtil.getElements(productPriceData);
-		String price = metaPriceList.get(0).getText().trim();
-		String ExTaxPrice = metaPriceList.get(1).getText().trim();
-		productInfoMap.put("price", price);
-		productInfoMap.put("Ex Tax", ExTaxPrice);
-		
-		
-	}
+//	public void getProductPriceData() {
+//		List<WebElement> metaPriceList= eleUtil.getElements(productPriceData);
+//		String price = metaPriceList.get(0).getText().trim();
+//		String ExTaxPrice = metaPriceList.get(1).getText().trim();
+//		productInfoMap.put("price", price);
+//		productInfoMap.put("Ex Tax", ExTaxPrice);
+//		
+//		
+//	}
 
 		 
 		
